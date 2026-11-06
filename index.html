@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>ひとことToDo</title>
+<meta name="description" content="思いついたら3秒で書ける、自分だけのToDo。ログイン不要、データはあなたのiPhoneの中だけに保存されます。">
+<meta name="theme-color" content="#F3F5F4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#121816" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="ひとことToDo">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-star" viewBox="0 0 24 24"><path d="M12 3.2l2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 17l-5.4 2.9 1.1-6.1-4.5-4.2 6.1-.8z" fill="currentColor"/></symbol>
+  <symbol id="i-cal" viewBox="0 0 24 24"><rect x="3.5" y="5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M3.5 10h17M8 3v4M16 3v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+  <symbol id="i-note" viewBox="0 0 24 24"><path d="M5 4h14v16H5zM8.5 9h7M8.5 13h7M8.5 17h4" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/></symbol>
+  <symbol id="i-img" viewBox="0 0 24 24"><rect x="3.5" y="4.5" width="17" height="15" rx="2.5" fill="none" stroke="currentColor" stroke-width="2"/><circle cx="9" cy="10" r="1.8" fill="currentColor"/><path d="M5 18l5-5 3 3 2.5-2.5L20 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><path d="M12 19V6M6 11.5L12 5.5l6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  <symbol id="i-gear" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12 2.8v2.6M12 18.6v2.6M21.2 12h-2.6M5.4 12H2.8M18.5 5.5l-1.8 1.8M7.3 16.7l-1.8 1.8M18.5 18.5l-1.8-1.8M7.3 7.3L5.5 5.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></symbol>
+</svg>
+
+<header class="top gutter">
+  <div class="bar">
+    <h1>ひとことToDo <small id="today"></small></h1>
+    <button class="iconbtn" id="openSettings" aria-label="設定とバックアップ"><svg><use href="#i-gear"/></svg></button>
+  </div>
+  <nav class="tabs" id="tabs" aria-label="表示の切り替え">
+    <button data-v="all" aria-pressed="true">すべて<span class="n" id="n-all"></span></button>
+    <button data-v="today">今日まで<span class="n" id="n-today"></span></button>
+    <button data-v="work">仕事<span class="n" id="n-work"></span></button>
+    <button data-v="life">プライベート<span class="n" id="n-life"></span></button>
+    <button data-v="star">★重要<span class="n" id="n-star"></span></button>
+  </nav>
+</header>
+
+<div id="notices" class="gutter"></div>
+<main id="main" class="gutter">
+  <div class="empty"><b>読み込み中…</b></div>
+</main>
+
+<form class="add" id="addForm" autocomplete="off">
+  <div class="opts" role="group" aria-label="追加するタスクの設定">
+    <button type="button" class="chip work" id="a-work" aria-pressed="true">仕事</button>
+    <button type="button" class="chip life" id="a-life" aria-pressed="false">プライベート</button>
+    <span class="sep"></span>
+    <button type="button" class="chip" data-due="0" aria-pressed="false">今日</button>
+    <button type="button" class="chip" data-due="1" aria-pressed="false">明日</button>
+    <label class="chip" id="a-datechip" aria-pressed="false"><svg><use href="#i-cal"/></svg><span id="a-datelabel">日付</span><input type="date" id="a-date" aria-label="期限の日付"></label>
+    <span class="sep"></span>
+    <button type="button" class="chip st" id="a-star" aria-pressed="false"><svg><use href="#i-star"/></svg>重要</button>
+  </div>
+  <div class="row">
+    <input id="a-title" type="text" enterkeyhint="done" placeholder="思いついたことを入力" aria-label="タスク">
+    <button class="go" id="a-go" type="submit" aria-label="追加" disabled><svg><use href="#i-up"/></svg></button>
+  </div>
+  <p class="hint">「#仕事」「#プ」で分類、「!」で重要。続けて何件でも入力できます。</p>
+</form>
+
+<div id="sheetRoot"></div>
+<div id="toastRoot"></div>
+<script src="app.js"></script>
+</body>
+</html>
